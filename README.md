@@ -1,6 +1,4 @@
-# پروژه Battlegrounds - Frontend و Server
-
-اینجا قراره Frontend و Server بازی Hearthstone Battlegrounds رو پیاده‌سازی کنیم. Frontend رو با Pygame می‌نویسیم و Server رو با Socket Programming.
+#پروژه بازی hearthstone
 
 ## مستندات
 
