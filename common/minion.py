@@ -1,4 +1,3 @@
-
 class Minion:
     def __init__(self, card_id, name, tier, attack, health, tribe=None, keywords=None):
         self.card_id = card_id
