@@ -26,7 +26,7 @@ class Minion:
         self.attack += attack
         self.health += health
 
-    # hooks
+    # hooks (برای آینده: combat loop / end turn / ...)
     def on_play(self, game_state):
         pass
 
@@ -34,6 +34,11 @@ class Minion:
         pass
 
     def after_attack(self, game_state):
+        pass
+
+    # رویداد عمومی: “یک مینیون خودی play شد”
+    # (برای کارت‌هایی مثل Wrath Weaver که به play شدن بقیه واکنش می‌دهند)
+    def on_friendly_minion_played(self, game_state, played_minion):
         pass
 
     def __repr__(self):
@@ -44,56 +49,24 @@ class Minion:
 
 class BeetleToken(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="BEETLE_TOKEN",
-            name="Beetle",
-            tier=1,
-            attack=1,
-            health=1,
-            tribe="Beast",
-            keywords=None
-        )
+        super().__init__("BEETLE_TOKEN", "Beetle", 1, 1, 1, tribe="Beast")
 
 
 class SkeletonToken(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="SKELETON_TOKEN",
-            name="Skeleton",
-            tier=1,
-            attack=1,
-            health=1,
-            tribe="Undead",
-            keywords=None
-        )
+        super().__init__("SKELETON_TOKEN", "Skeleton", 1, 1, 1, tribe="Undead")
 
 
 class HandToken(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="HAND_TOKEN",
-            name="Hand",
-            tier=1,
-            attack=2,
-            health=1,
-            tribe="Undead",
-            keywords={"Reborn"}
-        )
+        super().__init__("HAND_TOKEN", "Hand", 1, 2, 1, tribe="Undead", keywords={"Reborn"})
 
 
 #BEETLE BUILD
 
 class BuzzingVermin(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="BUZZING_VERMIN",
-            name="Buzzing Vermin",
-            tier=1,
-            attack=2,
-            health=3,
-            tribe="Beast",
-            keywords={"Taunt", "Deathrattle"}
-        )
+        super().__init__("BUZZING_VERMIN", "Buzzing Vermin", 1, 2, 3, tribe="Beast", keywords={"Taunt", "Deathrattle"})
 
     def on_deathrattle(self, game_state):
         print("Buzzing Vermin deathrattle triggers, summoning a Beetle...")
@@ -102,17 +75,10 @@ class BuzzingVermin(Minion):
 
 class ForestRover(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="FOREST_ROVER",
-            name="Forest Rover",
-            tier=2,
-            attack=3,
-            health=3,
-            tribe="Beast",
-            keywords={"Battlecry", "Deathrattle"}
-        )
+        super().__init__("FOREST_ROVER", "Forest Rover", 2, 3, 3, tribe="Beast", keywords={"Battlecry", "Deathrattle"})
 
     def on_play(self, game_state):
+        # فقط Beetle ها در کل بازی +1/+1 می‌گیرند
         game_state.global_card_buffs["BEETLE_TOKEN"]["attack"] += 1
         game_state.global_card_buffs["BEETLE_TOKEN"]["health"] += 1
 
@@ -123,15 +89,7 @@ class ForestRover(Minion):
 
 class NestSwarmer(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="NEST_SWARMER",
-            name="Nest Swarmer",
-            tier=2,
-            attack=2,
-            health=2,
-            tribe="Beast",
-            keywords={"Deathrattle"}
-        )
+        super().__init__("NEST_SWARMER", "Nest Swarmer", 2, 2, 2, tribe="Beast", keywords={"Deathrattle"})
 
     def on_deathrattle(self, game_state):
         print("Nest Swarmer deathrattle triggers, summoning three Beetles...")
@@ -141,15 +99,7 @@ class NestSwarmer(Minion):
 
 class TurquoiseSkitterer(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="TURQUOISE_SKITTERER",
-            name="Turquoise Skitterer",
-            tier=3,
-            attack=3,
-            health=4,
-            tribe="Beast",
-            keywords={"Deathrattle"}
-        )
+        super().__init__("TURQUOISE_SKITTERER", "Turquoise Skitterer", 3, 3, 4, tribe="Beast", keywords={"Deathrattle"})
 
     def on_deathrattle(self, game_state):
         game_state.global_card_buffs["BEETLE_TOKEN"]["attack"] += 1
@@ -160,15 +110,7 @@ class TurquoiseSkitterer(Minion):
 
 class MonstrousMacaw(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="MONSTROUS_MACAW",
-            name="Monstrous Macaw",
-            tier=3,
-            attack=3,
-            health=2,
-            tribe="Beast",
-            keywords=None
-        )
+        super().__init__("MONSTROUS_MACAW", "Monstrous Macaw", 3, 3, 2, tribe="Beast")
 
     def after_attack(self, game_state):
         print("Monstrous Macaw after_attack: triggering left-most friendly Deathrattle...")
@@ -179,15 +121,7 @@ class MonstrousMacaw(Minion):
 
 class HarmlessBonehead(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="HARMLESS_BONEHEAD",
-            name="Harmless Bonehead",
-            tier=1,
-            attack=2,
-            health=2,
-            tribe="Undead",
-            keywords={"Deathrattle"}
-        )
+        super().__init__("HARMLESS_BONEHEAD", "Harmless Bonehead", 1, 2, 2, tribe="Undead", keywords={"Deathrattle"})
 
     def on_deathrattle(self, game_state):
         print("Harmless Bonehead died, summoning two Skeletons...")
@@ -197,15 +131,7 @@ class HarmlessBonehead(Minion):
 
 class HandlessForsaken(Minion):
     def __init__(self):
-        super().__init__(
-            card_id="HANDLESS_FORSAKEN",
-            name="Handless Forsaken",
-            tier=2,
-            attack=3,
-            health=2,
-            tribe="Undead",
-            keywords={"Deathrattle"}
-        )
+        super().__init__("HANDLESS_FORSAKEN", "Handless Forsaken", 2, 3, 2, tribe="Undead", keywords={"Deathrattle"})
 
     def on_deathrattle(self, game_state):
         print("Handless Forsaken died, summoning a Hand (2/1) with Reborn...")
@@ -213,28 +139,35 @@ class HandlessForsaken(Minion):
 
 
 class NerubianDeathswarmer(Minion):
-    """
-    Battlecry: All your Undead in this game get +1 Attack.
-    """
     def __init__(self):
-        super().__init__(
-            card_id="NERUBIAN_DEATHSWARMER",
-            name="Nerubian Deathswarmer",
-            tier=2,
-            attack=2,
-            health=3,
-            tribe="Undead",
-            keywords={"Battlecry"}
-        )
+        super().__init__("NERUBIAN_DEATHSWARMER", "Nerubian Deathswarmer", 2, 2, 3, tribe="Undead", keywords={"Battlecry"})
 
     def on_play(self, game_state):
-        # 1) ثبت buff دائمی برای Undeadهای آینده
+        # buff دائمی برای Undead های آینده
         game_state.global_tribe_buffs["Undead"]["attack"] += 1
 
-        # 2) اعمال فوری روی Undeadهای فعلی روی برد
+        # اعمال فوری روی Undead های فعلی
         for m in game_state.board:
             if m.tribe == "Undead" and m.is_alive():
                 m.buff(attack=1, health=0)
 
         print("Nerubian Deathswarmer battlecry: all Undead get +1 Attack (permanent).")
+
+
+#DEMON
+
+class WrathWeaver(Minion):
+    """
+    After you play a Demon, gain +2/+2 and deal 1 damage to your hero.
+    """
+    def __init__(self):
+        super().__init__("WRATH_WEAVER", "Wrath Weaver", 1, 1, 3, tribe="Demon")
+
+    def on_friendly_minion_played(self, game_state, played_minion):
+        # اگر یک Demon play شد (حتی خودِ Weaver)، تریگر می‌خورد
+        if played_minion.tribe == "Demon":
+            self.buff(attack=2, health=2)
+            game_state.deal_hero_damage(1)
+            print("Wrath Weaver triggers: +2/+2 and hero takes 1 damage.")
+
 
