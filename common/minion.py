@@ -1,4 +1,3 @@
-
 class Minion:
     def __init__(self, card_id, name, tier, attack, health, tribe=None, keywords=None):
         self.card_id = card_id
@@ -27,23 +26,11 @@ class Minion:
         self.attack += attack
         self.health += health
 
-    def add_keyword(self, keyword):
-        self.keywords.add(keyword)
-
-    def remove_keyword(self, keyword):
-        self.keywords.discard(keyword)
-
     # hooks
     def on_play(self, game_state):
         pass
 
     def on_deathrattle(self, game_state):
-        pass
-
-    def on_start_of_combat(self, game_state):
-        pass
-
-    def on_end_of_turn(self, game_state):
         pass
 
     def after_attack(self, game_state):
@@ -68,7 +55,20 @@ class BeetleToken(Minion):
         )
 
 
-#BEETLE BUILD
+class SkeletonToken(Minion):
+    def __init__(self):
+        super().__init__(
+            card_id="SKELETON_TOKEN",
+            name="Skeleton",
+            tier=1,
+            attack=1,
+            health=1,
+            tribe="Undead",
+            keywords=None
+        )
+
+
+#BEASTS
 
 class BuzzingVermin(Minion):
     def __init__(self):
@@ -83,15 +83,10 @@ class BuzzingVermin(Minion):
         )
 
     def on_deathrattle(self, game_state):
-        print("Buzzing Vermin deathrattle triggers, summoning a Beetle...")
         game_state.summon_minion("BEETLE_TOKEN")
 
 
 class ForestRover(Minion):
-    """
-    Battlecry: All Beetles in this game get +1/+1
-    Deathrattle: Summon a 1/1 Beetle
-    """
     def __init__(self):
         super().__init__(
             card_id="FOREST_ROVER",
@@ -108,14 +103,10 @@ class ForestRover(Minion):
         game_state.global_card_buffs["BEETLE_TOKEN"]["health"] += 1
 
     def on_deathrattle(self, game_state):
-        print("Forest Rover deathrattle triggers, summoning a Beetle...")
         game_state.summon_minion("BEETLE_TOKEN")
 
 
 class NestSwarmer(Minion):
-    """
-    Deathrattle: Summon three 1/1 Beetles.
-    """
     def __init__(self):
         super().__init__(
             card_id="NEST_SWARMER",
@@ -128,15 +119,11 @@ class NestSwarmer(Minion):
         )
 
     def on_deathrattle(self, game_state):
-        print("Nest Swarmer deathrattle triggers, summoning three Beetles...")
         for _ in range(3):
             game_state.summon_minion("BEETLE_TOKEN")
 
 
 class TurquoiseSkitterer(Minion):
-    """
-    Deathrattle: All Beetles in this game get +1/+2. Then summon a Beetle.
-    """
     def __init__(self):
         super().__init__(
             card_id="TURQUOISE_SKITTERER",
@@ -151,15 +138,10 @@ class TurquoiseSkitterer(Minion):
     def on_deathrattle(self, game_state):
         game_state.global_card_buffs["BEETLE_TOKEN"]["attack"] += 1
         game_state.global_card_buffs["BEETLE_TOKEN"]["health"] += 2
-        print("Turquoise Skitterer deathrattle triggers: Beetles +1/+2, then summon a Beetle...")
         game_state.summon_minion("BEETLE_TOKEN")
 
 
 class MonstrousMacaw(Minion):
-    """
-    After this attacks, trigger the Deathrattle of your left-most minion.
-    (اینجا فقط منطق trigger را داریم؛ combat loop بعداً میاد.)
-    """
     def __init__(self):
         super().__init__(
             card_id="MONSTROUS_MACAW",
@@ -172,14 +154,27 @@ class MonstrousMacaw(Minion):
         )
 
     def after_attack(self, game_state):
-        print("Monstrous Macaw after_attack: triggering left-most friendly Deathrattle...")
         game_state.trigger_leftmost_friendly_deathrattle(exclude_minion=self)
 
 
+#UNDEAD
 
+class HarmlessBonehead(Minion):
+    """
+    Deathrattle: Summon two 1/1 Skeletons
+    """
+    def __init__(self):
+        super().__init__(
+            card_id="HARMLESS_BONEHEAD",
+            name="Harmless Bonehead",
+            tier=1,
+            attack=2,
+            health=2,
+            tribe="Undead",
+            keywords={"Deathrattle"}
+        )
 
-
-
-
-
-
+    def on_deathrattle(self, game_state):
+        print("Harmless Bonehead died, summoning two Skeletons...")
+        for _ in range(2):
+            game_state.summon_minion("SKELETON_TOKEN")
