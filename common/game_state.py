@@ -1,3 +1,4 @@
+
 class GameState:
     def __init__(self):
         self.board = []
@@ -10,7 +11,7 @@ class GameState:
 
         self.death_queue = []
 
-    #BOARD
+     #BOARD
 
     def add_to_board(self, minion, position=None):
         if len(self.board) >= self.max_board:
@@ -37,6 +38,7 @@ class GameState:
             ForestRover,
             NestSwarmer,
             TurquoiseSkitterer,
+            MonstrousMacaw,
         )
 
         if card_id == "BEETLE_TOKEN":
@@ -49,18 +51,45 @@ class GameState:
             minion = NestSwarmer()
         elif card_id == "TURQUOISE_SKITTERER":
             minion = TurquoiseSkitterer()
+        elif card_id == "MONSTROUS_MACAW":
+            minion = MonstrousMacaw()
         else:
             print("Unknown card_id:", card_id)
             return False
 
-        # Battlecry فقط هنگام Play (فعلاً برای تست، اینجا اجرا می‌کنیم)
+        # Battlecry فقط هنگام Play (فعلاً چون hand نداریم، همینجا اجرا می‌کنیم)
         if "Battlecry" in minion.keywords:
             minion.on_play(self)
 
-        # Buffهای دائمی کارت-محور
         self.apply_global_buffs(minion)
-
         return self.add_to_board(minion, position)
+
+    #DEATHRATTLE TRIGGER  
+
+    def trigger_deathrattle(self, minion):
+        """Deathrattle را بدون کشتن مینیون اجرا می‌کند (مثل Macaw)."""
+        if minion is None:
+            return False
+        if minion not in self.board:
+            return False
+        if "Deathrattle" not in minion.keywords:
+            return False
+
+        minion.on_deathrattle(self)
+        return True
+
+    def trigger_leftmost_friendly_deathrattle(self, exclude_minion=None):
+        """
+        چپ‌ترین مینیونی که Deathrattle دارد را پیدا می‌کند و trigger می‌کند.
+        exclude_minion برای جلوگیری از انتخاب خود Macaw است.
+        """
+        for m in self.board:
+            if exclude_minion is not None and m is exclude_minion:
+                continue
+            if "Deathrattle" in m.keywords and m.is_alive():
+                return self.trigger_deathrattle(m)
+        print("No valid left-most Deathrattle minion found.")
+        return False
 
     #DEATH PROCESSING
 
@@ -95,7 +124,6 @@ class GameState:
     def deal_damage_to_slot(self, slot_index, damage):
         if slot_index < 0 or slot_index >= len(self.board):
             return
-
         target = self.board[slot_index]
         target.take_damage(damage)
         self.process_deaths()
@@ -105,8 +133,4 @@ class GameState:
         for i, m in enumerate(self.board):
             print(f"{i}: {m}")
         print("===================")
-
-
-
-
 
