@@ -56,16 +56,25 @@ class Hero:
 
         # Lich King: Give a friendly minion Reborn for next combat only
         if self.hero_id == "LICH_KING":
-            # target باید یک Minion روی برد همین بازیکن باشد
             if target not in player.board:
                 return False, "Invalid target"
 
             target.reborn_next_combat = True
             return True, f"Lich King gave Reborn to {target.name} (next combat)"
 
+        # Sylvanas: Give +2/+1 to your minions that died last combat
+        if self.hero_id == "SYLVANAS":
+            buffed = 0
+            for m in player.board:
+                if m.card_id in player.dead_last_combat_card_ids and m.is_alive():
+                    m.buff(attack=2, health=1)
+                    buffed += 1
+            return True, f"Sylvanas buffed {buffed} minion(s) (+2/+1) from last combat deaths"
+
         return True, "Hero power used (logic not implemented yet)"
 
     def __repr__(self):
         return f"<Hero {self.name} | Power: {self.power_name}>"
+
 
 
