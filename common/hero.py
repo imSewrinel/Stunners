@@ -39,7 +39,21 @@ class Hero:
             return False, "Not enough gold"
 
         player.hero_power_uses_left -= 1
+
+        #Hero power logic (pre-UI)
+        if self.hero_id == "YOGG":
+            card_id = match_state.get_random_minion_from_tier(player.tavern_tier)
+            if card_id is None:
+                return False, "NoMinionsInTierPool"
+
+            ok, msg = match_state.add_to_hand(player_id, card_id)
+            if not ok:
+                return False, msg
+
+            return True, f"Yogg added {card_id} to hand"
+
         return True, "Hero power used (logic not implemented yet)"
 
     def __repr__(self):
         return f"<Hero {self.name} | Power: {self.power_name}>"
+
