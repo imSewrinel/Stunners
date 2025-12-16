@@ -17,6 +17,29 @@ class Hero:
         self.requires_target = requires_target
         self.uses_per_turn = uses_per_turn
 
+    def can_use_power(self, player_state):
+        if self.power_type != "active":
+            return False
+        if player_state.hero_power_uses_left <= 0:
+            return False
+        if player_state.gold < self.power_cost:
+            return False
+        return True
+
+    def use_power(self, match_state, player_id, target=None):
+        player = match_state.get_player(player_id)
+
+        if not self.can_use_power(player):
+            return False, "Cannot use hero power"
+
+        if self.requires_target and target is None:
+            return False, "Target required"
+
+        if not match_state.spend_gold(player_id, self.power_cost):
+            return False, "Not enough gold"
+
+        player.hero_power_uses_left -= 1
+        return True, "Hero power used (logic not implemented yet)"
+
     def __repr__(self):
         return f"<Hero {self.name} | Power: {self.power_name}>"
-
