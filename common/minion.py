@@ -11,6 +11,10 @@ class Minion:
         self.is_golden = False
         self.dead = False
 
+        # برای Hero Power Lich King:
+        # فقط برای "کامبت بعدی" به یک مینیون داده می‌شود (UI-ready)
+        self.reborn_next_combat = False
+
     def is_alive(self):
         return self.health > 0 and not self.dead
 
@@ -45,7 +49,7 @@ class Minion:
         return f"<Minion {self.name} {self.attack}/{self.health} keywords={self.keywords}>"
 
 
-#TOKENS
+# TOKENS
 
 class BeetleToken(Minion):
     def __init__(self):
@@ -62,7 +66,7 @@ class HandToken(Minion):
         super().__init__("HAND_TOKEN", "Hand", 1, 2, 1, tribe="Undead", keywords={"Reborn"})
 
 
-#BEETLE BUILD
+# BEETLE BUILD
 
 class BuzzingVermin(Minion):
     def __init__(self):
@@ -117,7 +121,7 @@ class MonstrousMacaw(Minion):
         game_state.trigger_leftmost_friendly_deathrattle(exclude_minion=self)
 
 
-#UNDEAD
+# UNDEAD
 
 class HarmlessBonehead(Minion):
     def __init__(self):
@@ -154,7 +158,7 @@ class NerubianDeathswarmer(Minion):
         print("Nerubian Deathswarmer battlecry: all Undead get +1 Attack (permanent).")
 
 
-#DEMON
+# DEMON
 
 class WrathWeaver(Minion):
     """
@@ -169,5 +173,3 @@ class WrathWeaver(Minion):
             self.buff(attack=2, health=2)
             game_state.deal_hero_damage(1)
             print("Wrath Weaver triggers: +2/+2 and hero takes 1 damage.")
-
-

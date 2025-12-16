@@ -41,6 +41,8 @@ class Hero:
         player.hero_power_uses_left -= 1
 
         #Hero power logic (pre-UI)
+
+        # Yogg-Saron: Add random minion from current tier to hand
         if self.hero_id == "YOGG":
             card_id = match_state.get_random_minion_from_tier(player.tavern_tier)
             if card_id is None:
@@ -52,8 +54,18 @@ class Hero:
 
             return True, f"Yogg added {card_id} to hand"
 
+        # Lich King: Give a friendly minion Reborn for next combat only
+        if self.hero_id == "LICH_KING":
+            # target باید یک Minion روی برد همین بازیکن باشد
+            if target not in player.board:
+                return False, "Invalid target"
+
+            target.reborn_next_combat = True
+            return True, f"Lich King gave Reborn to {target.name} (next combat)"
+
         return True, "Hero power used (logic not implemented yet)"
 
     def __repr__(self):
         return f"<Hero {self.name} | Power: {self.power_name}>"
+
 
