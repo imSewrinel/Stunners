@@ -1,7 +1,8 @@
 import pygame
+from utils import *
+from config import *
 
 class GameManager:
-
     def __init__(self, width: int, height: int, caption: str, fps: int) -> None:
         pygame.init()
         try:
@@ -16,6 +17,7 @@ class GameManager:
         self.fps = fps
 
         self.screen = pygame.display.set_mode((width, height))
+        self.assets = load_assets()
         pygame.display.set_caption(caption)
 
         self.clock = pygame.time.Clock()

@@ -1,5 +1,23 @@
-class Minion:
-    def __init__(self, card_id, name, tier, attack, health, tribe=None, keywords=None):
+from core.game_object import GameObject
+
+class Minion(GameObject):
+    def __init__(
+            self, 
+            game, 
+            image, 
+            x_scale, 
+            y_scale, 
+            card_id, 
+            name, 
+            tier, 
+            attack, 
+            health, 
+            tribe=None, 
+            keywords=None, 
+            initial_x=0, 
+            initial_y=0
+        ):
+        super().__init__(game, image, x_scale, y_scale, initial_x, initial_y)
         self.card_id = card_id
         self.name = name
         self.tier = tier
