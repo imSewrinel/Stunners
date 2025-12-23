@@ -55,3 +55,7 @@ class Game_object(pygame.sprite.Sprite):
 
 	def __del__(self):
 		pass
+
+
+# Backwards-compatible alias
+GameObject = Game_object

@@ -1,23 +1,17 @@
-from core.game_object import GameObject
-
-class Minion(GameObject):
+class Minion:
     def __init__(
-            self, 
-            game, 
-            image, 
-            x_scale, 
-            y_scale, 
-            card_id, 
-            name, 
-            tier, 
-            attack, 
-            health, 
-            tribe=None, 
-            keywords=None, 
-            initial_x=0, 
+            self,
+            card_id,
+            name,
+            tier,
+            attack,
+            health,
+            tribe=None,
+            keywords=None,
+            initial_x=0,
             initial_y=0
         ):
-        super().__init__(game, image, x_scale, y_scale, initial_x, initial_y)
+        # Data-only minion (visuals handled by the client/GameManager)
         self.card_id = card_id
         self.name = name
         self.tier = tier
@@ -32,6 +26,8 @@ class Minion(GameObject):
         # برای Hero Power Lich King:
         # فقط برای "کامبت بعدی" به یک مینیون داده می‌شود (UI-ready)
         self.reborn_next_combat = False
+        # position for simple client rendering (not required)
+        self.pos = (initial_x, initial_y)
 
     def is_alive(self):
         return self.health > 0 and not self.dead
