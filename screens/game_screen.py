@@ -1,11 +1,6 @@
 from core.screen_base import Screen
 from core.screen_manager import ScreenType
-from common.minion import (
-    BeetleToken, SkeletonToken, HandToken,
-    BuzzingVermin, ForestRover, NestSwarmer,
-    TurquoiseSkitterer, MonstrousMacaw, HarmlessBonehead,
-    HandlessForsaken, NerubianDeathswarmer, WrathWeaver,
-)
+from common.minion import *
 
 class GameScreen(Screen):
     def load(self):
