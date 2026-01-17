@@ -12,29 +12,29 @@ class ScreenManager:
     def __init__(self):
         self.current_screen = None
         self.registry = {}
-         # تو این قسمت ذخیره میشن Heroو GameState
 
+        # تو این قسمت ذخیره میشن Heroو GameState
         self.game_state = GameState()
         self.match_state = MatchState()
         self.hero = None
         self.player_id = 0
 
-def register(self , screen_type , screen_class):
-    self.registry[screen_type] = screen_class
+    def register(self, screen_type, screen_class):
+        self.registry[screen_type] = screen_class
 
-def ChangeScreen(self , screen_type):
-    if self.current_screen:
-        self.current_screen.unload()
-    screen_class = self.registry[screen_type]
-    self.current_screen = screen_class(self)
-    self.current_screen.load()
+    def change_screen(self, screen_type):
+        if self.current_screen:
+            self.current_screen.unload()
+        screen_class = self.registry[screen_type]
+        self.current_screen = screen_class(self)
+        self.current_screen.load()
 
-def update(self):
-    if self.current_screen:
-        self.current_screen.update()
+    def update(self):
+        if self.current_screen:
+            self.current_screen.update()
 
-def render(self):
-    if self.current_screen:
-        self.current_screen.render()
+    def render(self):
+        if self.current_screen:
+            self.current_screen.render()
 
 
