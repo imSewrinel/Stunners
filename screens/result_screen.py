@@ -2,7 +2,7 @@ from screens.screen_base import Screen
 import pygame
 
 
-class Result_screen(Screen):
+class ResultScreen(Screen):
     def load(self):
         try:
             self.player = self.manager.match_state.get_player(self.manager.player_id)

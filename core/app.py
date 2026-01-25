@@ -1,9 +1,9 @@
 import pygame
 from core.screen_manager import ScreenManager, ScreenType
-from screens.login_screen import Login_screen
-from screens.lobby_screen import Lobby_screen
-from screens.game_screen import Game_screen
-from screens.result_screen import Result_screen
+from screens.login_screen import LoginScreen
+from screens.lobby_screen import LobbyScreen
+from screens.game_screen import GameScreen
+from screens.result_screen import ResultScreen
 from config import *
 
 
@@ -32,10 +32,10 @@ class GameManager:
         self.screen_manager.app = self  # give screens access to app if needed
 
         # Register lightweight pygame-based screens here so many files aren't required
-        self.screen_manager.register(ScreenType.LOGIN, Login_screen)
-        self.screen_manager.register(ScreenType.LOBBY, Lobby_screen)
-        self.screen_manager.register(ScreenType.GAME, Game_screen)
-        self.screen_manager.register(ScreenType.RESULT, Result_screen)
+        self.screen_manager.register(ScreenType.LOGIN, LoginScreen)
+        self.screen_manager.register(ScreenType.LOBBY, LobbyScreen)
+        self.screen_manager.register(ScreenType.GAME, GameScreen)
+        self.screen_manager.register(ScreenType.RESULT, ResultScreen)
 
         # Start on login (start the game)
         self.screen_manager.change_screen(ScreenType.LOGIN)

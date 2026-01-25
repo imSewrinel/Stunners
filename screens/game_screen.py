@@ -5,7 +5,7 @@ import pygame
 import time
 
 
-class Game_screen(Screen):
+class GameScreen(Screen):
     def load(self):
         self.last_message = ""
         self.message_time = 0

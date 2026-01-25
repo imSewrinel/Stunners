@@ -4,7 +4,7 @@ from common.hero import Hero
 import pygame
 
 
-class Lobby_screen(Screen):
+class LobbyScreen(Screen):
     def load(self):
         self.msg = "Choose hero: 1=YOGG  2=LICH_KING  3=SYLVANAS"
 

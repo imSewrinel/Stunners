@@ -2,7 +2,8 @@ from screens.screen_base import Screen
 from core.screen_manager import ScreenType
 import pygame
 
-class Login_screen(Screen):
+
+class LoginScreen(Screen):
     def load(self):
         self.msg = "Press ENTER to Login"
 
