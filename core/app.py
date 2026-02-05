@@ -1,7 +1,10 @@
 import pygame
+from utils import get_meta, Lazy_assets
+from config import *
+from common.game_state import GameState
+from common.minion import BuzzingVermin, ForestRover, NestSwarmer
 
 class GameManager:
-
     def __init__(self, width: int, height: int, caption: str, fps: int) -> None:
         pygame.init()
         try:
@@ -15,8 +18,12 @@ class GameManager:
         self.caption = caption
         self.fps = fps
 
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption(caption)
+
+        # Load assets 
+        self.assets_meta = get_meta()
+        self.Lazy_assets_handler = Lazy_assets(self.assets_meta)
 
         self.clock = pygame.time.Clock()
         self.running = False
@@ -31,7 +38,10 @@ class GameManager:
         pass
 
     def draw(self) -> None:
-        pass
+        # lazy assets test
+        battlefield_img = self.Lazy_assets_handler.build("battlefield/battlefield_Pandaria")
+        battlefield_img = pygame.transform.scale(battlefield_img, (self.width, self.height))
+        self.screen.blit(battlefield_img)
 
     def run(self) -> None:
         self.running = True
@@ -41,7 +51,6 @@ class GameManager:
             self.handle_events()
             self.update()
 
-            self.screen.fill((0, 0, 0))
             self.draw()
 
             pygame.display.flip()

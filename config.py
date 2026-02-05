@@ -1,8 +1,8 @@
 import pygame
 
 # Game settings
-WIDTH = 1200
-HEIGHT = 700
+WIDTH = 900
+HEIGHT = 500
 CAPTION = "STUNNERS GAME"
 FPS = 60
 
@@ -30,4 +30,9 @@ DAMAGE_RESOLVE = 120
 DEATHRATTLE_TRIGGLE = 300
 SUMMON_DELAY = 80
 REBORN_SPAWN = 260
+
+
+# IMAGE PATHS
+BASE_IMAGE_PATH = 'assets/'
+ALLOWED_IMAGE_EXTS = (".webp", ".png", ".jpg")
 
