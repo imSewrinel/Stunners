@@ -1,10 +1,8 @@
 import pygame
-<<<<<<< HEAD
 from utils import get_meta, Lazy_assets
 from config import *
 from common.game_state import GameState
 from common.minion import BuzzingVermin, ForestRover, NestSwarmer
-=======
 from core.screen_manager import ScreenManager, ScreenType
 from screens.login_screen import LoginScreen
 from screens.lobby_screen import LobbyScreen
@@ -12,7 +10,6 @@ from screens.game_screen import GameScreen
 from screens.result_screen import ResultScreen
 from config import *
 
->>>>>>> 6b3cefaa1a28f038446ca08e07a52060a86eae86
 
 class GameManager:
     def __init__(self, width: int, height: int, caption: str, fps: int) -> None:
@@ -68,19 +65,16 @@ class GameManager:
         self.screen_manager.update()
 
     def draw(self) -> None:
-<<<<<<< HEAD
         # lazy assets test
         battlefield_img = self.Lazy_assets_handler.build("battlefield/battlefield_Pandaria")
         battlefield_img = pygame.transform.scale(battlefield_img, (self.width, self.height))
         self.screen.blit(battlefield_img)
-=======
         # Let current screen render to surface
         if self.screen_manager.current_screen:
             try:
                 self.screen_manager.current_screen.render()
             except Exception:
                 pass
->>>>>>> 6b3cefaa1a28f038446ca08e07a52060a86eae86
 
     def run(self) -> None:
         self.running = True
@@ -90,11 +84,6 @@ class GameManager:
             self.handle_events()
             self.update()
 
-<<<<<<< HEAD
-=======
-            # background
-            self.screen.fill((0, 0, 0))
->>>>>>> 6b3cefaa1a28f038446ca08e07a52060a86eae86
             self.draw()
 
             pygame.display.flip()

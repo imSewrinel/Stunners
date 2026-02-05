@@ -31,13 +31,10 @@ DEATHRATTLE_TRIGGLE = 300
 SUMMON_DELAY = 80
 REBORN_SPAWN = 260
 
-<<<<<<< HEAD
 
 # IMAGE PATHS
 BASE_IMAGE_PATH = 'assets/'
 ALLOWED_IMAGE_EXTS = (".webp", ".png", ".jpg")
 
-=======
 # Screens
 FONT_CACHE = {}
->>>>>>> 6b3cefaa1a28f038446ca08e07a52060a86eae86
