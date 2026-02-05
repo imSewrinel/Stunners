@@ -36,3 +36,5 @@ REBORN_SPAWN = 260
 BASE_IMAGE_PATH = 'assets/'
 ALLOWED_IMAGE_EXTS = (".webp", ".png", ".jpg")
 
+# Screens
+FONT_CACHE = {}
