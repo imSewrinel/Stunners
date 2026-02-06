@@ -18,12 +18,21 @@ class PlayerState:
         # برای Sylvanas (بعداً توسط combat پر می‌شود)
         self.dead_last_combat_card_ids = set()
 
-
     def __repr__(self):
         return (
             f"<Player {self.player_id} | Hero={self.hero.name} "
             f"| HP={self.hp} Gold={self.gold} PowerUsesLeft={self.hero_power_uses_left}>"
         )
+    
+    def ensure_game_state(self):
+        if self.game_state is None:
+            gs = GameState()
+            gs.player_hp = self.hp
+            gs.board = self.board  # share list reference
+            self.game_state = gs
+        else:
+            self.game_state.board = self.board
+            self.game_state.player_hp = self.hp
 
 
       

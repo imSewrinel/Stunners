@@ -33,40 +33,21 @@ def test_recruit_buy_play_sell():
     assert_true(len(player1.board) == 1, "board should have 1 after play")
 
     recruit_phase.start_recruit(player1.player_id, 2)
-    assert_true(player1.gold == 1, "gold should be 1 on turn 2 after buying on turn 1")
-
-    # Wrong order of phases just for testing "recruit_phase.sell()"
-    recruit_phase.start_recruit(player1.player_id, 3)
-    assert_true(player1.gold == 2, "gold should be 2 on turn 3 after turn 2")
-
-    recruit_phase.start_recruit(player1.player_id, 4)
-    assert_true(player1.gold == 3, "gold should be 3 on turn 4 after turn 3")
-
-    recruit_phase.buy(player1.player_id, 0)
-    assert_true(len(player1.hand) == 1, "hand should have 1 after buy")
-    assert_true(player1.gold == 0, "gold should be 0 after buy")
+    assert_true(player1.gold == 4, "gold should be 4 on turn 2")
 
     recruit_phase.sell(player1.player_id, 0)
-    assert_true(len(player1.hand) == 0, "board should be empty after sell")
-    assert_true(player1.gold == 1, "gold should be 1 after sell")
-
-    # Wrong order of phases just for testing "recruit_phase.sell()"
-    recruit_phase.start_recruit(player1.player_id, 5)
-    assert_true(player1.gold == 2, "gold should be 2 on turn 5 after buying and selling on turn 4")
-
-    recruit_phase.start_recruit(player1.player_id, 6)
-    assert_true(player1.gold == 3, "gold should be 3 on turn 6 after turn 5")
-
-    recruit_phase.start_recruit(player1.player_id, 7)
-    assert_true(player1.gold == 4, "gold should be 4 on turn 7 after turn 6")
-
-    recruit_phase.start_recruit(player1.player_id, 8)
-    assert_true(player1.gold == 5, "gold should be 5 on turn 8 after turn 7")
-    assert_true(player1.tavern_tier == 1, "tavern_tier should be 1")
+    assert_true(len(player1.board) == 0, "board should be empty after sell")
+    assert_true(player1.gold == 5, "gold should be 5 after sell")
 
     recruit_phase.upgrade_tavern(player1.player_id)
     assert_true(player1.tavern_tier == 2, "tavern_tier should be 2")
     assert_true(player1.gold == 0, "gold should be 0 after upgrade tavern tier 1 to 2")
+
+    recruit_phase.start_recruit(player1.player_id, 3)
+    # Shop is updateded after updating tavern tier
+    assert_true(len(player1.shop) == 4, "shop should have 4 cards")
+    assert_true(player1.gold == 5, "gold should be 5 on turn 3")
+
 
 
 def main():

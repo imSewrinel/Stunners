@@ -29,6 +29,20 @@ class Minion:
         # position for simple client rendering (not required)
         self.pos = (initial_x, initial_y)
 
+    def clone(self):
+        """Copy for combat simulation (keeps the same card class/hook behavior)."""
+        minion = self.__class__() if self.__class__ is not Minion else Minion(
+            self.card_id, self.name, self.tier, self.attack, self.health,
+            tribe=self.tribe, keywords=set(self.keywords),
+            initial_x=0, initial_y=0
+        )
+        # Copy dynamic state
+        minion.is_golden = getattr(self, "is_golden", False)
+        minion.dead = getattr(self, "dead", False)
+        minion.reborn_next_combat = getattr(self, "reborn_next_combat", False)
+        minion.pos = getattr(self, "pos", (0, 0))
+        return minion
+
     def is_alive(self):
         return self.health > 0 and not self.dead
 

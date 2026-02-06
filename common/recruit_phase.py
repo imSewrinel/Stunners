@@ -39,19 +39,6 @@ def create_minion(card_id: str):
     return cls()
 
 
-def ensure_player_game_state(player: PlayerState) -> GameState:
-    # attach a GameState for recruit-time triggers (battlecry / wrath weaver, ...)
-    if not hasattr(player, "game_state") or player.game_state is None:
-        gs = GameState()
-        gs.player_hp = player.hp
-        gs.board = player.board  # share list reference
-        player.game_state = gs
-    else:
-        player.game_state.board = player.board
-        player.game_state.player_hp = player.hp
-    return player.game_state
-
-
 
 # ------------- Recruit class -------------
 class RecruitError(Exception):
@@ -84,7 +71,7 @@ class RecruitPhase:
             allowed.extend(self.match.minion_pool_by_tier.get(t, []))
         return allowed
 
-    def roll_shop(self, player_id: int) -> List[str]:
+    def roll_shop(self, player_id:str) -> List[str]:
         player = self.match.get_player(player_id)
         self._get_or_init_shop_fields(player)
 
@@ -93,10 +80,11 @@ class RecruitPhase:
             player.shop = []
             return player.shop
 
-        player.shop = [self.match.rng.choice(allowed) for _ in range(TAVERN_SIZE)]
+        player.shop = [self.match.rng.choice(allowed) for 
+                       _ in range(TAVERN_SIZE_BASE_ON_TIRE[player.tavern_tier])]
         return player.shop
 
-    def start_recruit(self, player_id: int, round_no:int = 1) -> Dict[str, Any]:
+    def start_recruit(self, player_id:str, round_no:int = 1) -> Dict[str, Any]:
         """Start recruit for one player: gain gold (handled by MatchState.start_turn) + roll shop."""
         player = self.match.get_player(player_id)
         self._get_or_init_shop_fields(player)
@@ -116,24 +104,26 @@ class RecruitPhase:
         }
 
     # ----- Actions -----
-    def refresh(self, player_id: int) -> Dict[str, Any]:
+    def refresh(self, player_id:str) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
         self._get_or_init_shop_fields(player)
 
         if player.shop_frozen:
             raise RecruitError("Shop is frozen. Unfreeze first.")
+        
         if not self.match.spend_gold(player_id, player.refresh_cost):
             raise RecruitError("Not enough gold to refresh.")
+        
         self.roll_shop(player_id)
         return {"type": "REFRESH", "gold": player.gold, "shop": list(player.shop)}
 
-    def freeze(self, player_id: int, value: bool = True) -> Dict[str, Any]:
+    def freeze(self, player_id:str, value: bool = True) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
         self._get_or_init_shop_fields(player)
         player.shop_frozen = bool(value)
         return {"type": "FREEZE", "shop_frozen": player.shop_frozen}
 
-    def buy(self, player_id: int, shop_index: int) -> Dict[str, Any]:
+    def buy(self, player_id:str, shop_index: int) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
         self._get_or_init_shop_fields(player)
 
@@ -152,7 +142,7 @@ class RecruitPhase:
 
         return {"type": "BUY", "card_id": card_id, "gold": player.gold, "hand_size": len(player.hand)}
 
-    def play(self, player_id: int, hand_index: int, board_pos: Optional[int] = None) -> Dict[str, Any]:
+    def play(self, player_id:str, hand_index: int, board_pos: Optional[int] = None) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
 
         if hand_index < 0 or hand_index >= len(player.hand):
@@ -163,30 +153,29 @@ class RecruitPhase:
 
         minion = player.hand.pop(hand_index)
 
-        gs = ensure_player_game_state(player)
+        player.ensure_game_state()
         # GameState.play_minion handles battlecry + global buffs + wrath weaver triggers
-        ok = gs.play_minion(minion, position=board_pos)
-        player.hp = gs.player_hp  # sync hero hp back (e.g., Wrath Weaver)
+        ok = player.game_state.play_minion(minion, position=board_pos)
 
         if not ok:
             # revert
             player.hand.insert(hand_index, minion)
-            raise RecruitError("Failed to play minion (board full).")
+            raise RecruitError("Failed to play minion.")
         
         return {"type": "PLAY", "card_id": minion.card_id, "hp": player.hp, "board_size": len(player.board)}
 
-    def sell(self, player_id: int, hand_index: int, refund: int = 1) -> Dict[str, Any]:
+    def sell(self, player_id:str, board_index: int, refund: int = 1) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
 
-        if hand_index < 0 or hand_index >= len(player.hand):
+        if board_index < 0 or board_index >= len(player.board):
             raise RecruitError("Invalid board index.")
         
-        sold = player.hand.pop(hand_index)
+        sold = player.board.pop(board_index)
         player.gold = min(10, player.gold + refund)
         
         return {"type": "SELL", "card_id": sold.card_id, "gold": player.gold}
 
-    def upgrade_tavern(self, player_id: int) -> Dict[str, Any]:
+    def upgrade_tavern(self, player_id:str) -> Dict[str, Any]:
         player = self.match.get_player(player_id)
 
         if player.tavern_tier == 4:

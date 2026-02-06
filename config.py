@@ -19,7 +19,10 @@ REFRESH_STORE_COINS = 1
 FREEZE_COINS = 0
 #------------------
 # GOLDEN, RECRUIT, DISCOVER
-TAVERN_SIZE = 3
+TAVERN_SIZE_BASE_ON_TIRE = {1: 3,
+                            2: 4, 
+                            3: 4,
+                            4: 5}
 MAX_MINIOS_IN_HAND = 10
 MAX_MINIOS_IN_BOARD = 7
 
