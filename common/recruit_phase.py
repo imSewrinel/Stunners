@@ -111,8 +111,12 @@ class RecruitPhase:
         if player.shop_frozen:
             raise RecruitError("Shop is frozen. Unfreeze first.")
         
-        if not self.match.spend_gold(player_id, player.refresh_cost):
-            raise RecruitError("Not enough gold to refresh.")
+        if player.hero.hero_id != "MILLHOUSE_MANASTORM":
+            if not self.match.spend_gold(player_id, REFRESH_STORE_COINS):
+                raise RecruitError("Not enough gold to refresh.")
+        else:
+            if not self.match.spend_gold(player_id, REFRESH_STORE_COINS_FOR_Millhouse_Manastorm):
+                raise RecruitError("Not enough gold to refresh.")
         
         self.roll_shop(player_id)
         return {"type": "REFRESH", "gold": player.gold, "shop": list(player.shop)}
@@ -132,9 +136,13 @@ class RecruitPhase:
         
         if len(player.hand) >= MAX_MINIOS_IN_HAND:
             raise RecruitError("Hand is full.")
-
-        if not self.match.spend_gold(player_id, BUY_MINION_COINS):
-            raise RecruitError("Not enough gold to buy.")
+    
+        if player.hero.hero_id != "MILLHOUSE_MANASTORM":
+            if not self.match.spend_gold(player_id, BUY_MINION_COINS):
+                raise RecruitError("Not enough gold to buy.")
+        else:
+            if not self.match.spend_gold(player_id, BUY_MINION_COINS_FOR_Millhouse_Manastorm):
+                raise RecruitError("Not enough gold to buy.")
         
         card_id = player.shop.pop(shop_index)
         minion = create_minion(card_id)
@@ -186,6 +194,8 @@ class RecruitPhase:
                              3: 8, 
                              4: 9}
         cost = base_cost_by_tier.get(player.tavern_tier)
+        if player.hero.hero_id == "MILLHOUSE_MANASTORM": # hero power
+            cost += 1
 
         if not self.match.spend_gold(player_id, cost):
             raise RecruitError("Not enough gold to upgrade tavern.")
