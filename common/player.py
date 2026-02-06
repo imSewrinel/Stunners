@@ -1,7 +1,10 @@
+from common.game_state import GameState
 class PlayerState:
-    def __init__(self, player_id, hero):
+    def __init__(self, player_id, hero, game_state:None|GameState = None):
         self.player_id = player_id
         self.hero = hero
+
+        self.game_state = game_state
 
         self.hp = 30
         self.gold = 3          # طبق داک: شروع بازی 3 طلا
@@ -15,10 +18,6 @@ class PlayerState:
         # برای Sylvanas (بعداً توسط combat پر می‌شود)
         self.dead_last_combat_card_ids = set()
 
-        # ---- Economy modifiers (برای Millhouse و آینده) ----
-        self.minion_buy_cost = 3
-        self.refresh_cost = 1
-        self.tavern_upgrade_extra_cost = 0
 
     def __repr__(self):
         return (

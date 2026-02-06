@@ -3,7 +3,7 @@ import random
 
 class MatchState:
     def __init__(self, rng_seed=123):
-        self.players = {}
+        self.players:dict = {}
         self.current_player_id = None
 
         # RNG برای تست‌های deterministic (هم‌تیمی UI هم خروجی ثابت می‌بیند)
@@ -36,13 +36,11 @@ class MatchState:
     def get_player(self, player_id):
         return self.players[player_id]
 
-    def start_turn(self, player_id):
+    def start_turn(self, player_id, round_no:int):
         player = self.get_player(player_id)
 
-        if player.gold < 10:
+        if (player.gold < 10) and (round_no > 1): # after the first round
             player.gold += 1
-            if player.gold > 10:
-                player.gold = 10
 
         player.hero_power_uses_left = player.hero.uses_per_turn
         self.current_player_id = player_id
