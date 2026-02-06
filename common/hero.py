@@ -17,7 +17,7 @@ class Hero(GameObject):
         initial_x=0, 
         initial_y=0
     ):
-        super().__init__(game, image, x_scale, y_scale, initial_x, initial_y)
+        # super().__init__(game, image, x_scale, y_scale, initial_x, initial_y)
         self.hero_id = hero_id
         self.name = name
         self.power_name = power_name

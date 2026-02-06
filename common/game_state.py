@@ -139,22 +139,22 @@ class GameState:
 
     #Death processing
 
-    def collect_deaths_left_to_right(self):
-        for m in self.board:
-            if m.dead and m not in self.death_queue:
-                self.death_queue.append(m)
+    def collect_deaths_left_to_right(self, board): # we should use clone board
+        for minion in board:
+            if minion.dead and minion not in self.death_queue:
+                self.death_queue.append(minion)
 
-    def process_deaths(self):
-        self.collect_deaths_left_to_right()
+    def process_deaths(self, board):
+        self.collect_deaths_left_to_right(board)
 
         while self.death_queue:
             dying = self.death_queue.pop(0)
 
-            if dying not in self.board:
+            if dying not in board:
                 continue
 
             # مثل بازی: اول حذف، بعد deathrattle
-            self.board.remove(dying)
+            board.remove(dying)
 
             if "Deathrattle" in dying.keywords:
                 dying.on_deathrattle(self)

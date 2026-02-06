@@ -18,10 +18,13 @@ SALE_MINION_COINS = 1
 REFRESH_STORE_COINS = 1
 FREEZE_COINS = 0
 #------------------
-# TAVERN
-#------------------
 # GOLDEN, RECRUIT, DISCOVER
+TAVERN_SIZE_BASE_ON_TIRE = {1: 3,
+                            2: 4, 
+                            3: 4,
+                            4: 5}
 MAX_MINIOS_IN_HAND = 10
+MAX_MINIOS_IN_BOARD = 7
 
 
 # ANIMATION (ms)
