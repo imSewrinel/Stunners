@@ -14,9 +14,6 @@ class CombatResult:
 
 
 # ------------- Combat class -------------
-class CombatPhaseError(Exception):
-    pass
-
 class CombatPhase:
     def __init__(self, match: MatchState, rng: random.Random | None = None):
         self.match = match
@@ -54,10 +51,12 @@ class CombatPhase:
         while self.is_living(board1) and self.is_living(board2):
             rounds += 1
             if rounds > 500:
-                raise CombatPhaseError("Combat exceeded safety limit (possible infinite loop).")
+                return {"type": "ERROR", "code": "ERR_INFINIT_LOOP", "message": "Combat exceeded safety limit"}
 
             attacker_player = player1 if attacker_is_player1 else player2
             defender_player = player2 if attacker_is_player1 else player1
+
+            print(f"{attacker_player.player_id} starts:")
 
             atk_board = board1 if attacker_is_player1 else board2
             def_board = board2 if attacker_is_player1 else board1

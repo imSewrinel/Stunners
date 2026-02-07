@@ -71,5 +71,9 @@ class MatchState:
             return None
         return self.rng.choice(pool)
 
-
+    def is_match_done(self) -> bool:
+        for player_id in self.players:
+            if self.players[player_id].hero.health <= 0:
+                return False
+        return True 
 
