@@ -3,41 +3,8 @@ from typing import List, Optional, Dict, Any
 from common.match_state import MatchState
 from common.game_state import GameState
 from common.player import PlayerState
-from common.minion import ( # Aded Minions untill now
-    BeetleToken, SkeletonToken, HandToken,
-    BuzzingVermin, ForestRover, NestSwarmer, TurquoiseSkitterer, MonstrousMacaw,
-    HarmlessBonehead, HandlessForsaken, NerubianDeathswarmer,
-    WrathWeaver,
-)
+from common.minion import *
 from config import *
-
-
-# --------- Minion factory (card_id -> class) ---------
-_MINION_FACTORY = {
-    "BEETLE_TOKEN": BeetleToken,
-    "SKELETON_TOKEN": SkeletonToken,
-    "HAND_TOKEN": HandToken,
-
-    "BUZZING_VERMIN": BuzzingVermin,
-    "FOREST_ROVER": ForestRover,
-    "NEST_SWARMER": NestSwarmer,
-    "TURQUOISE_SKITTERER": TurquoiseSkitterer,
-    "MONSTROUS_MACAW": MonstrousMacaw,
-
-    "HARMLESS_BONEHEAD": HarmlessBonehead,
-    "HANDLESS_FORSAKEN": HandlessForsaken,
-    "NERUBIAN_DEATHSWARMER": NerubianDeathswarmer,
-
-    "WRATH_WEAVER": WrathWeaver,
-}
-
-
-def create_minion(card_id: str):
-    cls = _MINION_FACTORY.get(card_id)
-    if cls is None:
-        raise ValueError(f"Unknown card_id: {card_id}")
-    return cls()
-
 
 
 # ------------- Recruit class -------------

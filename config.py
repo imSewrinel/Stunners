@@ -43,3 +43,5 @@ ALLOWED_IMAGE_EXTS = (".webp", ".png", ".jpg")
 
 # Screens
 FONT_CACHE = {}
+
+

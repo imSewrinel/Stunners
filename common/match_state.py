@@ -13,10 +13,10 @@ class MatchState:
         # Pool خیلی ساده برای Pre-UI
         # فقط چند نمونه کافی است؛ بعداً کاملش می‌کنید یا از data می‌خوانید.
         self.minion_pool_by_tier = {
-            1: ["BEETLE_TOKEN", "BUZZING_VERMIN", "HARMLESS_BONEHEAD", "WRATH_WEAVER"],
-            2: ["FOREST_ROVER", "NEST_SWARMER", "HANDLESS_FORSAKEN", "NERUBIAN_DEATHSWARMER"],
-            3: ["TURQUOISE_SKITTERER", "MONSTROUS_MACAW"],
-            4: [],
+            1: ["BEETLE_TOKEN", "SKELETON_TOKEN", "HAND_TOKEN", "BUZZING_VERMIN", "HARMLESS_BONEHEAD", "WRATH_WEAVER"],
+            2: ["FOREST_ROVER", "HANDLESS_FORSAKEN", "NERUBIAN_DEATHSWARMER", "ETERNAL_KNIGHT"],
+            3: ["MONSTROUS_MACAW", "FALSE_IMPLICATOR", "HANDLESS_FORSAKEN", "SPRIGHTLY_SCARAB"],
+            4: ["TURQUOISE_SKITTERER"],
         }
 
     def add_player(self, player_id, hero):
