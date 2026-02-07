@@ -10,6 +10,9 @@ class PlayerState:
         self.gold = 3          # طبق داک: شروع بازی 3 طلا
         self.tavern_tier = 1
 
+        self.shop = []
+        self.shop_frozen = False
+
         self.board = []
         self.hand = []
 

@@ -159,7 +159,7 @@ class GameState:
             if "Deathrattle" in dying.keywords:
                 dying.on_deathrattle(self)
 
-            self.collect_deaths_left_to_right()
+            self.collect_deaths_left_to_right(board)
 
     #Test helpers
 
@@ -168,12 +168,12 @@ class GameState:
             return
         target = self.board[slot_index]
         target.take_damage(damage)
-        self.process_deaths()
+        self.process_deaths(self.board)
 
     def debug_print_board(self):
         print("=== BOARD STATE ===")
         for i, m in enumerate(self.board):
-            print(f"{i}: {m}")
+            print(f"{i+1}: {m}")
         print("Player HP:", self.player_hp)
         print("===================")
 

@@ -14,9 +14,6 @@ class CombatResult:
 
 
 # ------------- Combat class -------------
-class CombatPhaseError(Exception):
-    pass
-
 class CombatPhase:
     def __init__(self, match: MatchState, rng: random.Random | None = None):
         self.match = match
@@ -40,6 +37,10 @@ class CombatPhase:
         player1.ensure_game_state()
         player2.ensure_game_state()
 
+        # _______ control SYLVANAS power _______
+        player1.dead_last_combat_card_ids = set()
+        player2.dead_last_combat_card_ids = set()
+
         # Deep copy boards (combat should not mutate recruit boards directly)
         board1 = [minion.clone() for minion in player1.board]
         board2 = [minion.clone() for minion in player2.board]
@@ -50,7 +51,12 @@ class CombatPhase:
         while self.is_living(board1) and self.is_living(board2):
             rounds += 1
             if rounds > 500:
-                raise CombatPhaseError("Combat exceeded safety limit (possible infinite loop).")
+                return {"type": "ERROR", "code": "ERR_INFINIT_LOOP", "message": "Combat exceeded safety limit"}
+
+            attacker_player = player1 if attacker_is_player1 else player2
+            defender_player = player2 if attacker_is_player1 else player1
+
+            print(f"{attacker_player.player_id} starts:")
 
             atk_board = board1 if attacker_is_player1 else board2
             def_board = board2 if attacker_is_player1 else board1
@@ -71,6 +77,9 @@ class CombatPhase:
             # Check if defender is dead or not
             if defender.health <= 0:
                 print("    Minion (", defender.name, ") is dead now!")
+                # _______ control SYLVANAS power _______
+                if defender_player.hero.hero_id == "SYLVANAS":
+                    defender_player.dead_last_combat_card_ids.add(defender)
                 def_board.pop(defender_idx)
             else:
             # Defender hits back if alive
@@ -79,6 +88,9 @@ class CombatPhase:
                 # Check if attacker is dead or not
                 if attacker.health <= 0:
                     print("    Minion (", attacker.name, ") is dead now!")
+                    # _______ control SYLVANAS power _______
+                    if attacker_player.hero.hero_id == "SYLVANAS":
+                        attacker_player.dead_last_combat_card_ids.add(attacker)
                     atk_board.pop(attacker_idx)
 
             # TODO: game_state board should be updated

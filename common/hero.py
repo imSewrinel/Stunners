@@ -3,23 +3,19 @@ from core.game_object import GameObject
 class Hero(GameObject):
     def __init__(
         self,
-        game, 
-        image, 
-        x_scale, 
-        y_scale, 
         hero_id,
         name,
+        health,
         power_name,
         power_cost,
         power_type,          # "active" یا "passive"
         requires_target=False,
         uses_per_turn=0,
-        initial_x=0, 
-        initial_y=0
     ):
         # super().__init__(game, image, x_scale, y_scale, initial_x, initial_y)
         self.hero_id = hero_id
         self.name = name
+        self.health = health
         self.power_name = power_name
         self.power_cost = power_cost
         self.power_type = power_type
